@@ -17,12 +17,14 @@ import java.util.List;
 @Service
 public class FeedPollingService {
 
-	// "/json/services/sports/live" 		[all live];
-	// "/json/services/sports/live/1101" 	[all football];
-	// "/json/services/sports/live/392201" 	[football norway];
+	// /live 		[all live];
+	// /live/1101 	[all football];
+	// /live/392201 [football norway];
+	// /live/30201	[football germany];
+	// /live/33201 	[football belgium];
 
 	private final String LIVE_FEED_URL = Application.SERVER_BASE_URL +
-		"/json/services/sports/live/1101"; //[football norway]
+		"/json/services/sports/live/33201";
 
 	private static final Logger log = LoggerFactory.getLogger(FeedPollingService.class);
 
@@ -38,6 +40,9 @@ public class FeedPollingService {
 	@Scheduled(fixedDelay=5000)
 	public void fetchLiveScoreData() {
 		RestTemplate restTemplate = new RestTemplate();
+		//todo - make this part more intelligent
+		//we first call /live if there are no games but subsections,
+		//we get all group ids and do a call for each id
 		LinkedHashMap response = restTemplate
 			.getForObject(LIVE_FEED_URL, LinkedHashMap.class);
 		List<Event> parsedResponse = dataProcessor.process(response);

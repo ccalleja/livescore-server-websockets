@@ -18,11 +18,13 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/live-score', function (greeting) {
-            showGreeting('Received ' + JSON.parse(greeting.body).length +
+        stompClient.subscribe('/topic/live-score', function (data) {
+            showGreeting('Received ' + JSON.parse(data.body).length +
                 ' updates : ' + new Date().toString());
         });
+        stompClient.send("/tipico/live-feed", {});
     });
+
 }
 
 function disconnect() {
