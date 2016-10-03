@@ -1,5 +1,6 @@
 package com.tipico.livescore.dto;
 
+import com.tipico.livescore.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,8 @@ import java.util.LinkedHashMap;
 public class Event {
 
 	private static final Logger log = LoggerFactory.getLogger(Event.class);
-	private static final String EVENT_BASE_URL = "https://m.tipico.com/json/services/sports/event/";
+	private static final String EVENT_BASE_URL = Application.SERVER_BASE_URL +
+		"/json/services/sports/event/";
 
 
 	private String id;

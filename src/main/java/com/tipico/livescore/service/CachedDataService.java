@@ -20,7 +20,7 @@ public class CachedDataService {
 	private List<Event> liveScoreCachedData;
 
 	@Cacheable("liveScoreCache")
-	public Object getLiveGamesData(){
+	public List<Event> getLiveGamesData(){
 		log.debug("Get live games data called");
 		return liveScoreCachedData;
 	}
