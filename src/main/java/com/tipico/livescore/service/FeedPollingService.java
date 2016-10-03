@@ -4,9 +4,9 @@ import com.tipico.livescore.dto.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -23,19 +23,19 @@ public class FeedPollingService {
 	@Autowired
 	CachedDataService cachedDataService;
 
-	//@Scheduled(fixedDelay=5000)
-	@Scheduled(fixedDelay = 100000)
+	@Scheduled(fixedDelay=5000)
 	public void fetchLiveScoreData() {
 		RestTemplate restTemplate = new RestTemplate();
 		LinkedHashMap response = restTemplate
 			.getForObject(LIVE_FEED_URL, LinkedHashMap.class);
-		Object parsedResponse = processRequiredData(response);
-		if (parsedResponse != null) {
+		List<Event> parsedResponse = processRequiredData(response);
+		if (parsedResponse != null &&
+			!parsedResponse.equals(cachedDataService.getLiveGamesData())) {
 			cachedDataService.updateLiveScoreData(parsedResponse);
 		}
 	}
 
-	private Object processRequiredData(LinkedHashMap unprocessedResponse) {
+	private List<Event> processRequiredData(LinkedHashMap unprocessedResponse) {
 		log.debug(unprocessedResponse.toString());
 
 		Integer totelEvents = (Integer) unprocessedResponse.get("totalEventsCount");
@@ -46,7 +46,7 @@ public class FeedPollingService {
 		return parseAndMapData(((ArrayList) unprocessedResponse.get("groupCategories")));
 	}
 
-	private Object parseAndMapData(ArrayList<LinkedHashMap> groupCategories) {
+	private List<Event> parseAndMapData(ArrayList<LinkedHashMap> groupCategories) {
 		List<Event> parsedEvents = new ArrayList<>();
 		log.debug("Parsing group categories");
 		for (LinkedHashMap groupCategory : groupCategories) {
