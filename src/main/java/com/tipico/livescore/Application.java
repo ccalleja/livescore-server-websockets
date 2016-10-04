@@ -6,6 +6,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -25,6 +27,7 @@ import java.util.concurrent.Executors;
 @EnableScheduling
 @EnableWebSocketMessageBroker
 @EnableAspectJAutoProxy
+@PropertySource("classpath:application.properties")
 public class Application extends AbstractWebSocketMessageBrokerConfigurer
     implements SchedulingConfigurer {
 
@@ -58,4 +61,8 @@ public class Application extends AbstractWebSocketMessageBrokerConfigurer
         registry.addEndpoint("/live-feed-ws").withSockJS();
     }
 
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 }

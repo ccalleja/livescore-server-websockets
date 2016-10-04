@@ -7,6 +7,7 @@ import com.tipico.livescore.processor.DataProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,14 +18,11 @@ import java.util.List;
 @Service
 public class FeedPollingService {
 
-	// /live 		[all live];
-	// /live/1101 	[all football];
-	// /live/392201 [football norway];
-	// /live/30201	[football germany];
-	// /live/33201 	[football belgium];
+	@Value( "${live.sport.id}" )
+	private String liveSportId;
 
-	private final String LIVE_FEED_URL = Application.SERVER_BASE_URL +
-		"/json/services/sports/live/51201";
+	private static final String LIVE_FEED_URL = Application.SERVER_BASE_URL +
+		"/json/services/sports/live/";
 
 	@Autowired
 	private CachedDataService cachedDataService;
@@ -42,7 +40,7 @@ public class FeedPollingService {
 		//we first call /live if there are no games but subsections,
 		//we get all group ids and do a call for each id
 		LinkedHashMap response = restTemplate
-			.getForObject(LIVE_FEED_URL, LinkedHashMap.class);
+			.getForObject(LIVE_FEED_URL+liveSportId, LinkedHashMap.class);
 		List<Event> parsedResponse = dataProcessor.process(response);
 		if (parsedResponse != null &&
 			//todo - use a better comparison to avoid sending data
