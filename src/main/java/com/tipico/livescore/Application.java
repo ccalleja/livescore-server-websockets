@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -23,6 +24,7 @@ import java.util.concurrent.Executors;
 @EnableAsync
 @EnableScheduling
 @EnableWebSocketMessageBroker
+@EnableAspectJAutoProxy
 public class Application extends AbstractWebSocketMessageBrokerConfigurer
     implements SchedulingConfigurer {
 

@@ -3,7 +3,7 @@ package com.tipico.livescore.service;
 
 import com.tipico.livescore.Application;
 import com.tipico.livescore.dto.Event;
-import com.tipico.livescore.util.DataProcessor;
+import com.tipico.livescore.processor.DataProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,7 @@ public class FeedPollingService {
 	// /live/33201 	[football belgium];
 
 	private final String LIVE_FEED_URL = Application.SERVER_BASE_URL +
-		"/json/services/sports/live/33201";
-
-	private static final Logger log = LoggerFactory.getLogger(FeedPollingService.class);
+		"/json/services/sports/live/51201";
 
 	@Autowired
 	private CachedDataService cachedDataService;

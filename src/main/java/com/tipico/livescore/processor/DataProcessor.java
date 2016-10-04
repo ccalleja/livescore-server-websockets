@@ -1,4 +1,4 @@
-package com.tipico.livescore.util;
+package com.tipico.livescore.processor;
 
 import com.tipico.livescore.dto.Event;
 import org.slf4j.Logger;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DataProcessor {
@@ -23,32 +24,21 @@ public class DataProcessor {
 			log.debug("No events returned from source, skipping execution");
 			return null;
 		}
+
 		return parseAndMapData(((ArrayList) unprocessedResponse.get("groupCategories")));
+
 	}
 
 	private List<Event> parseAndMapData(ArrayList<LinkedHashMap> groupCategories) {
-		List<Event> parsedEvents = new ArrayList<>();
-		log.debug("Parsing group categories");
-		for (LinkedHashMap groupCategory : groupCategories) {
-			String groupCatType = (String) groupCategory.get("image");
-			String groupCatName = (String) groupCategory.get("displayName");
-			if (groupCatType.equalsIgnoreCase("soccer")) {
-				log.debug(
-					String.format("Processing group category %s", groupCatName));
-				ArrayList<LinkedHashMap> matches = (ArrayList) groupCategory.get("matches");
-				for (LinkedHashMap match : matches) {
-					Event event = Event.buildFromMapData(match);
-					if (event != null) {
-						parsedEvents.add(event);
-					}
-				}
 
-			} else {
-				log.debug(String.format("Skipping group category %s. " +
-					"Only catering for SOCCER", groupCatName));
-			}
-
-		}
+		log.info("Starting to parse matches");
+		
+		List<Event> parsedEvents = groupCategories.stream()
+			.filter(groupCat -> groupCat.get("image").equals("soccer"))
+			.map(gcMatches -> ((ArrayList<LinkedHashMap>) gcMatches.get("matches")))
+			.flatMap(matches -> matches.stream())
+			.map(event -> Event.buildFromMapData(event))
+			.collect(Collectors.toList());
 
 		return parsedEvents;
 	}
