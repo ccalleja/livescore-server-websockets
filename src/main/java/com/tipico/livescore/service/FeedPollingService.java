@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.LinkedHashMap;
@@ -33,17 +34,19 @@ public class FeedPollingService {
 	@Autowired
 	private DataProcessor dataProcessor;
 
+	@Autowired
+	private RestOperations restTemplate;
+
 	@Scheduled(fixedDelay=5000)
 	public void fetchLiveScoreData() {
-		RestTemplate restTemplate = new RestTemplate();
-		//todo - make this part more intelligent
-		//we first call /live if there are no games but subsections,
-		//we get all group ids and do a call for each id
 		LinkedHashMap response = restTemplate
 			.getForObject(LIVE_FEED_URL+liveSportId, LinkedHashMap.class);
+		//todo - make this part more intelligent
+		//the above can return games, or groups
 		List<Event> parsedResponse = dataProcessor.process(response);
 		if (parsedResponse != null &&
-			//todo - use a better comparison to avoid sending data
+			//todo - compare better
+			// all game details toString concatenated
 			!parsedResponse.equals(cachedDataService.getLiveGamesData())) {
 			cachedDataService.updateLiveScoreData(parsedResponse);
 			webSocketService.publishUpdates();
