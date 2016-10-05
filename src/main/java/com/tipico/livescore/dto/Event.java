@@ -1,6 +1,8 @@
 package com.tipico.livescore.dto;
 
 import com.tipico.livescore.Application;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,11 @@ public class Event {
 	private int awayTeamScore;
 
 	private String tipicoEventURL;
+
+	public Event() {
+		ReflectionToStringBuilder.
+			setDefaultStyle(ToStringStyle.SIMPLE_STYLE);
+	}
 
 	public static Event buildFromMapData(LinkedHashMap eventData){
 		if(eventData == null){
@@ -111,4 +118,12 @@ public class Event {
 		this.id = id;
 	}
 
+	public int getHash() {
+		return this.toString().hashCode();
+	}
+
+	@Override
+	public String toString(){
+		return ReflectionToStringBuilder.toString(this);
+	}
 }

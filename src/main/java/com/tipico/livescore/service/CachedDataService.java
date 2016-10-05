@@ -3,6 +3,7 @@ package com.tipico.livescore.service;
 import com.tipico.livescore.dto.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class CachedDataService {
 		return liveScoreCachedData;
 	}
 
-	@CacheEvict(value = "liveScoreCache", allEntries = true)
+	@CacheEvict(value = "liveScoreCache", allEntries = true, condition = "#liveData!=null")
 	public void updateLiveScoreData(List<Event> liveData){
 		log.debug("Cache updating");
 		this.liveScoreCachedData = liveData;

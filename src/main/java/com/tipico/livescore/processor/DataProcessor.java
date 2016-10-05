@@ -42,4 +42,21 @@ public class DataProcessor {
 
 		return parsedEvents;
 	}
+
+	public boolean changesDetected(List<Event> currentEvents, List<Event> fetchedEvents){
+		if(currentEvents == null && fetchedEvents != null){
+			return true;
+		} else if(fetchedEvents == null && currentEvents != null){
+			return false;
+		} else {
+
+			String current = currentEvents.stream().map(Object::toString)
+				.collect(Collectors.joining(","));
+
+			String fetched = fetchedEvents.stream().map(Object::toString)
+				.collect(Collectors.joining(","));
+
+			return !current.equals(fetched);
+		}
+	}
 }
