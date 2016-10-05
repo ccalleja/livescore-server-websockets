@@ -24,7 +24,7 @@ public class EventTest {
 
 		String toString1 = event.toString();
 		assertNotNull(toString1);
-		assertEquals("0,123,8,team1,1,team2,0,http://www.site.com/live/123",
+		assertEquals("123,8,team1,1,team2,0,http://www.site.com/live/123",
 			toString1);
 
 		event = new Event() {{

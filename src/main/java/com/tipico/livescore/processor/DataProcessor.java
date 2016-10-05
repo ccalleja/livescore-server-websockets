@@ -1,8 +1,11 @@
 package com.tipico.livescore.processor;
 
 import com.tipico.livescore.dto.Event;
+import com.tipico.livescore.service.CachedDataService;
+import com.tipico.livescore.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,20 +19,26 @@ public class DataProcessor {
 	private static final Logger log = LoggerFactory
 		.getLogger(DataProcessor.class);
 
-	public List<Event> process(LinkedHashMap unprocessedResponse) {
+	@Autowired
+	private CachedDataService cachedDataService;
+
+	@Autowired
+	private WebSocketService webSocketService;
+
+	public void process(LinkedHashMap unprocessedResponse) {
 		log.debug(unprocessedResponse.toString());
 
 		Integer totelEvents = (Integer) unprocessedResponse.get("totalEventsCount");
-		if (totelEvents == null || totelEvents == 0) {
-			log.debug("No events returned from source, skipping execution");
-			return null;
+		if (totelEvents != null && totelEvents > 0) {
+			List<Event> events = parseAndMapData(((ArrayList) unprocessedResponse.get("groupCategories")));
+			if (changesDetected(cachedDataService.getLiveGamesData(), events)) {
+				cachedDataService.updateLiveScoreData(events);
+				webSocketService.publishUpdates();
+			}
 		}
-
-		return parseAndMapData(((ArrayList) unprocessedResponse.get("groupCategories")));
-
 	}
 
-	private List<Event> parseAndMapData(ArrayList<LinkedHashMap> groupCategories) {
+	protected List<Event> parseAndMapData(ArrayList<LinkedHashMap> groupCategories) {
 
 		log.info("Starting to parse matches");
 		
@@ -43,7 +52,7 @@ public class DataProcessor {
 		return parsedEvents;
 	}
 
-	public boolean changesDetected(List<Event> currentEvents, List<Event> fetchedEvents){
+	protected boolean changesDetected(List<Event> currentEvents, List<Event> fetchedEvents){
 		if(currentEvents == null && fetchedEvents != null){
 			return true;
 		} else if(fetchedEvents == null && currentEvents != null){

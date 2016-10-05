@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+
+import static org.springframework.util.CollectionUtils.*;
 
 /**
  * Created by clint on 03/10/16.
@@ -28,8 +31,11 @@ public class CachedDataService {
 
 	@CacheEvict(value = "liveScoreCache", allEntries = true, condition = "#liveData!=null")
 	public void updateLiveScoreData(List<Event> liveData){
-		log.debug("Cache updating");
-		this.liveScoreCachedData = liveData;
+		if(!isEmpty(liveData)) {
+			log.debug("Cache updating");
+			this.liveScoreCachedData = liveData;
+		}
+
 	}
 
 }

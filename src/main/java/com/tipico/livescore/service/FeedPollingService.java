@@ -23,12 +23,6 @@ public class FeedPollingService {
 		"/json/services/sports/live/";
 
 	@Autowired
-	private CachedDataService cachedDataService;
-
-	@Autowired
-	private WebSocketService webSocketService;
-
-	@Autowired
 	private DataProcessor dataProcessor;
 
 	@Autowired
@@ -40,10 +34,6 @@ public class FeedPollingService {
 			.getForObject(LIVE_FEED_URL+liveSportId, LinkedHashMap.class);
 		//todo - make this part more intelligent
 		//the above can return games, or groups
-		List<Event> parsedResponse = dataProcessor.process(response);
-		if (dataProcessor.changesDetected(cachedDataService.getLiveGamesData(), parsedResponse)) {
-			cachedDataService.updateLiveScoreData(parsedResponse);
-			webSocketService.publishUpdates();
-		}
+		dataProcessor.process(response);
 	}
 }
