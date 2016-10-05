@@ -11,10 +11,3 @@ via get requests or websocket configuration.
 - open localhost:8080/index.html
 - click on Connect
 
-##TODOS / Improvements
-- intelligent get data based on results returned
-- send only changed games
-- send games to user only on socket registration
-- gradle?
-- html page showing websocket stats
-- research on socket limits (max connections, load balancing etc etc)
