@@ -3,6 +3,7 @@ package com.tipico.livescore.controller;
 import com.tipico.livescore.dto.Event;
 import com.tipico.livescore.service.CachedDataService;
 import com.tipico.livescore.service.WebSocketService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -21,6 +22,7 @@ public class LiveScoreController {
     @Autowired
     private WebSocketService webSocketService;
 
+    @ApiOperation(value = "getLiveFeed", nickname = "getLiveFeed")
     @RequestMapping("/livescore")
     public List<Event> getLiveFeed() {
         return cachedDataService.getLiveGamesData();

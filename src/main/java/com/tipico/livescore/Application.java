@@ -18,6 +18,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,6 +34,7 @@ import java.util.concurrent.Executors;
 @EnableScheduling
 @EnableWebSocketMessageBroker
 @EnableAspectJAutoProxy
+@EnableSwagger2
 @PropertySource("classpath:application.properties")
 public class Application extends AbstractWebSocketMessageBrokerConfigurer
     implements SchedulingConfigurer {
@@ -71,5 +77,14 @@ public class Application extends AbstractWebSocketMessageBrokerConfigurer
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
+    }
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+            .select()
+            .apis(RequestHandlerSelectors.any())
+            .paths(PathSelectors.regex("/livescore.*"))
+            .build();
     }
 }
