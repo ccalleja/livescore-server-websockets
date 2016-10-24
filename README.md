@@ -11,3 +11,5 @@ via get requests or websocket configuration.
 - open localhost:8080/index.html
 - click on Connect
 
+##SWAGGER DOCUMENTATION
+Once you run the project you can access /swagger-ui.html to see swagger documentation about the rest endpoint

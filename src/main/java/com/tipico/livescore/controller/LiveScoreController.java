@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class LiveScoreController {
     private WebSocketService webSocketService;
 
     @ApiOperation(value = "getLiveFeed", nickname = "getLiveFeed")
-    @RequestMapping("/livescore")
+    @RequestMapping(value = "/livescore", method = RequestMethod.GET)
     public List<Event> getLiveFeed() {
         return cachedDataService.getLiveGamesData();
     }
