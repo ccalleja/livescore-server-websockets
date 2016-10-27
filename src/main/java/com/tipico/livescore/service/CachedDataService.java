@@ -1,41 +1,16 @@
 package com.tipico.livescore.service;
 
 import com.tipico.livescore.dto.Event;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-import static org.springframework.util.CollectionUtils.*;
-
 /**
- * Created by clint on 03/10/16.
+ * Created by clint on 27/10/2016.
  */
-@Service
-public class CachedDataService {
+public interface CachedDataService {
 
-	private static final Logger log = LoggerFactory.getLogger(FeedPollingService.class);
+	List<Event> getLiveGamesData();
 
-	private List<Event> liveScoreCachedData;
-
-	@Cacheable("liveScoreCache")
-	public List<Event> getLiveGamesData(){
-		log.debug("Get live games data called");
-		return liveScoreCachedData;
-	}
-
-	@CacheEvict(value = "liveScoreCache", allEntries = true, condition = "#liveData!=null")
-	public void updateLiveScoreData(List<Event> liveData){
-		if(!isEmpty(liveData)) {
-			log.debug("Cache updating");
-			this.liveScoreCachedData = liveData;
-		}
-
-	}
+	void updateLiveScoreData(List<Event> liveData);
 
 }

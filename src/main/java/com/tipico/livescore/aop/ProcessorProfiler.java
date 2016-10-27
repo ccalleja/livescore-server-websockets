@@ -14,7 +14,7 @@ public class ProcessorProfiler {
 
 	private static final Logger log = LoggerFactory.getLogger(ProcessorProfiler.class);
 
-	@Pointcut("execution(* com.tipico.livescore.processor.DataProcessor.*(..))")
+	@Pointcut("execution(* com.tipico.livescore.service.impl.DataProcessorImpl.*(..))")
 	public void dataProcessingMethods() { }
 
 	@Around("dataProcessingMethods()")
