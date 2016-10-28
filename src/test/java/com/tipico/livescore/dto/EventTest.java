@@ -54,7 +54,7 @@ public class EventTest {
 		Event event = Event.buildFromMapData(testEventData.get("event1"));
 
 		int hashCode = event.getHash();
-		assertEquals(-52531761, hashCode);
+		assertEquals(2139978485, hashCode);
 
 		event = Event.buildFromMapData(testEventData.get("event1"));
 
