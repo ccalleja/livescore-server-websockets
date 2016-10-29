@@ -1,4 +1,4 @@
-package com.tipico.livescore.aop;
+package com.tipico.livescore.profiling;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

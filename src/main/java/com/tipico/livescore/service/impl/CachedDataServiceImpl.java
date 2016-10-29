@@ -22,12 +22,14 @@ public class CachedDataServiceImpl implements CachedDataService {
 
 	private List<Event> liveScoreCachedData;
 
+	@Override
 	@Cacheable("liveScoreCache")
 	public List<Event> getLiveGamesData(){
 		log.debug("Get live games data called");
 		return liveScoreCachedData;
 	}
 
+	@Override
 	@CacheEvict(value = "liveScoreCache", allEntries = true, condition = "#liveData!=null")
 	public void updateLiveScoreData(List<Event> liveData){
 		if(!isEmpty(liveData)) {

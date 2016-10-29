@@ -26,6 +26,7 @@ public class FeedPollingServiceImpl implements FeedPollingService {
 	@Autowired
 	private RestOperations restTemplate;
 
+	@Override
 	@Scheduled(fixedDelay=5000)
 	public void fetchLiveScoreData() {
 		LinkedHashMap response = restTemplate
