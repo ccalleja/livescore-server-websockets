@@ -54,6 +54,7 @@ public class DataProcessorImpl implements DataProcessor {
 		return parsedEvents;
 	}
 
+	@Override
 	public boolean changesDetected(List<Event> currentEvents, List<Event> fetchedEvents){
 		if(currentEvents == null && fetchedEvents != null){
 			return true;
